@@ -25,7 +25,7 @@ public class Node implements Serializable {
 
     private List<Option> options;
 
-    private Boolean multipleOptionsChoiceAllowed;
+    private Boolean multipleOptionChoicesAllowed;
 
     private List<String> products;
 
@@ -39,13 +39,13 @@ public class Node implements Serializable {
 
     }
 
-    public Node(List<String> children, String parent, Boolean isLeaf, String prompt, List<Option> options, Boolean multipleOptionsChoiceAllowed, List<String> products, List<Route> routes) {
+    public Node(List<String> children, String parent, Boolean isLeaf, String prompt, List<Option> options, Boolean multipleOptionChoicesAllowed, List<String> products, List<Route> routes) {
         this.children = children;
         this.parent = parent;
         this.isLeaf = isLeaf;
         this.prompt = prompt;
         this.options = options;
-        this.multipleOptionsChoiceAllowed = multipleOptionsChoiceAllowed;
+        this.multipleOptionChoicesAllowed = multipleOptionChoicesAllowed;
         this.products = products;
         this.routes = routes;
         this.createdOn = new Date();
@@ -100,12 +100,12 @@ public class Node implements Serializable {
         this.options = options;
     }
 
-    public Boolean getMultipleOptionsChoiceAllowed() {
-        return multipleOptionsChoiceAllowed;
+    public Boolean getMultipleOptionChoicesAllowed() {
+        return multipleOptionChoicesAllowed;
     }
 
-    public void setMultipleOptionsChoiceAllowed(Boolean multipleOptionsChoiceAllowed) {
-        this.multipleOptionsChoiceAllowed = multipleOptionsChoiceAllowed;
+    public void setMultipleOptionChoicesAllowed(Boolean multipleOptionChoicesAllowed) {
+        this.multipleOptionChoicesAllowed = multipleOptionChoicesAllowed;
     }
 
     public List<String> getProducts() {

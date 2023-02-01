@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import xyz.helpmebuy.exception.AuthenticationException;
+import xyz.helpmebuy.exception.ClientException;
+import xyz.helpmebuy.exception.NotFoundException;
 import xyz.helpmebuy.response.ErrorResponse;
 
 @ControllerAdvice
@@ -19,6 +21,20 @@ public class ExceptionHandlerController {
     @ResponseBody
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleAuthenticationException(AuthenticationException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(ClientException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleClientException(ClientException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFoundException(NotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 

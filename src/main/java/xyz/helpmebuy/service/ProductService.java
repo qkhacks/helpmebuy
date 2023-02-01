@@ -9,6 +9,7 @@ import xyz.helpmebuy.repository.ProductRepository;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class ProductService {
@@ -60,5 +61,9 @@ public class ProductService {
         Product product = get(productId);
         productRepository.delete(product);
         return product;
+    }
+
+    public Boolean allExist(Set<String> productIds) {
+        return productRepository.countByIdIn(productIds) == productIds.size();
     }
 }
