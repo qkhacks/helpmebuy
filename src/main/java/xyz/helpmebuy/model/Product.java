@@ -13,7 +13,7 @@ public class Product implements Serializable {
 
     private String id;
 
-    private String text;
+    private String type;
 
     private String name;
 
@@ -33,8 +33,8 @@ public class Product implements Serializable {
 
     }
 
-    public Product(String text, String name, String description, String imageUrl, Map<String, Object> attributes, List<Link> links) {
-        this.text = text;
+    public Product(String type, String name, String description, String imageUrl, Map<String, Object> attributes, List<Link> links) {
+        this.type = type;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -52,12 +52,12 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getType() {
+        return type;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getName() {
