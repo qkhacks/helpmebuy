@@ -11,12 +11,12 @@ import xyz.helpmebuy.service.NodeService;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-public class NodeController extends AuthenticatedAdminController {
+public class NodeAdminController extends AuthenticatedAdminController {
 
     private final NodeService nodeService;
 
     @Autowired
-    public NodeController(NodeService nodeService) {
+    public NodeAdminController(NodeService nodeService) {
         this.nodeService = nodeService;
     }
 

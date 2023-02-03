@@ -11,12 +11,12 @@ import xyz.helpmebuy.service.ProductService;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-public class ProductController extends AuthenticatedAdminController {
+public class ProductAdminController extends AuthenticatedAdminController {
 
     private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductAdminController(ProductService productService) {
         this.productService = productService;
     }
 
