@@ -1,7 +1,11 @@
 package xyz.helpmebuy;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class HelpMeBuy {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        SpringApplication.run(HelpMeBuy.class, args);
     }
 }
