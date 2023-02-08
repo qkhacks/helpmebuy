@@ -30,7 +30,54 @@
                 </div>
             </div>
         </div>
-        <div id="admin-view"></div>
+        <div id="admin-view">
+            <div class="row" style="margin-top: 3rem;">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <h1>Trees</h1>
+                        </div>
+                        <div class="col-lg-2">
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-tree-modal">Add
+                                Tree</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="add-tree-modal" tabindex="-1" aria-labelledby="add-tree-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="add-tree-modal-label">Add Tree</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="add-tree-message"></div>
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Key</label>
+                            <input type="text" class="form-control" id="add-tree-key" placeholder="Tree Key">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Display Name</label>
+                            <input type="text" class="form-control" id="add-tree-display-name"
+                                placeholder="Tree Display Name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="add-tree-btn">Add Tree</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
         integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
