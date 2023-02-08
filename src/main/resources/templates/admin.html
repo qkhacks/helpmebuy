@@ -116,6 +116,32 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="delete-tree-modal" tabindex="-1" aria-labelledby="delete-tree-modal-label"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="delete-tree-modal-label">Delete Tree</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="delete-tree-message"></div>
+                    <form>
+                        <input type="hidden" id="delete-tree-key">
+                        <div class="mb-3">
+                            <label class="form-label">Confirmation</label>
+                            <input type="text" class="form-control" id="delete-tree-confirmation"
+                                placeholder="Enter 'yes' to confirm deletion of the tree">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="delete-tree-btn">Delete Tree</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/x-handlebars-template" id="trees-template">
         {{#each trees}}
         <tr id="tree-{{key}}">
@@ -126,8 +152,8 @@
             </td>
             <td>
                 <button class="btn btn-outline-warning btn-sm edit-tree-modal-btn" data-key="{{key}}" data-bs-toggle="modal" data-bs-target="#edit-tree-modal">Edit</button>
+                <button class="btn btn-outline-danger btn-sm delete-tree-modal-btn" data-key="{{key}}" data-bs-toggle="modal" data-bs-target="#delete-tree-modal">Delete</button>
                 <button class="btn btn-outline-primary btn-sm">Activation</button>
-                <button class="btn btn-outline-danger btn-sm">Delete</button>
             </td>
         </tr>
         {{/each}}

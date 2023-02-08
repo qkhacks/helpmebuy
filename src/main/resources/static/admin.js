@@ -62,6 +62,18 @@ function updateTree(key, displayName, success, error) {
     });
 }
 
+function deleteTree(key, success, error) {
+    $.ajax({
+        url: "/api/v1/trees/" + key,
+        type: "delete",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
@@ -174,5 +186,39 @@ $(document).ready(function () {
         }, function (data) {
             displayError($("#edit-tree-message"), data.responseJSON.message);
         })
+    });
+
+    body.on("click", ".delete-tree-modal-btn", function (e) {
+        let treeKey = $(this).data("key");
+        $("#delete-tree-key").val(treeKey);
+    });
+
+    $("#delete-tree-btn").click(function (e) {
+        e.preventDefault();
+
+        let key = $("#delete-tree-key").val().trim();
+
+        if (key === "") {
+            displayError($("#delete-tree-message"), "Tree is not selected");
+            return;
+        }
+
+        let confirmation = $("#delete-tree-confirmation").val();
+
+        if (confirmation !== "yes") {
+            displayError($("#delete-tree-message"), "Please confirm deletion of the tree below");
+            return;
+        }
+
+        deleteTree(key, function (data) {
+            if (data.hasOwnProperty("id")) {
+                displaySuccess($("#delete-tree-message"), "Tree deleted successfully");
+                $("#tree-" + key).remove();
+            } else {
+                displayError($("#delete-tree-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#delete-tree-message"), data.responseJSON.message);
+        });
     });
 });
