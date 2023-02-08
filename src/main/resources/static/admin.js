@@ -35,11 +35,40 @@ function listTrees(success, error) {
     });
 }
 
+function getTree(key, success, error) {
+    $.ajax({
+        url: "/api/v1/trees/" + key,
+        type: "get",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
+function updateTree(key, displayName, success, error) {
+    $.ajax({
+        url: "/api/v1/trees/" + key,
+        type: "put",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            displayName: displayName
+        }),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
     }
 }
+
+const body = $("body");
 
 const treesTemplate = Handlebars.compile($("#trees-template").html());
 
@@ -110,5 +139,40 @@ $(document).ready(function () {
         }, function (data) {
             displayError($("#add-tree-message"), data.responseJSON.message);
         });
+    });
+
+    body.on("click", ".edit-tree-modal-btn", function (e) {
+        let treeKey = $(this).data("key");
+        getTree(treeKey, function (data) {
+            $("#edit-tree-key").val(data.key);
+            $("#edit-tree-display-name").val(data.displayName);
+        });
+    });
+
+    $("#edit-tree-btn").click(function (e) {
+        e.preventDefault();
+        let key = $("#edit-tree-key").val().trim();
+        let displayName = $("#edit-tree-display-name").val().trim();
+
+        if (key === "") {
+            displayError($("#edit-tree-message"), "Tree is not selected");
+            return;
+        }
+
+        if (displayName === "") {
+            displayError($("#edit-tree-message"), "Display name is required");
+            return;
+        }
+
+        updateTree(key, displayName, function (data) {
+            if (data.hasOwnProperty("id")) {
+                displaySuccess($("#edit-tree-message"), "Changes saved successfully");
+                $("#tree-display-name-" + data.key).html(data.displayName);
+            } else {
+                displayError($("#edit-tree-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#edit-tree-message"), data.responseJSON.message);
+        })
     });
 });

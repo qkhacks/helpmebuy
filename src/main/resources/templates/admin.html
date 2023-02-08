@@ -90,16 +90,42 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="edit-tree-modal" tabindex="-1" aria-labelledby="edit-tree-modal-label"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="edit-tree-modal-label">Edit Tree</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="edit-tree-message"></div>
+                    <form>
+                        <input type="hidden" id="edit-tree-key">
+                        <div class="mb-3">
+                            <label class="form-label">Display Name</label>
+                            <input type="text" class="form-control" id="edit-tree-display-name"
+                                placeholder="Tree Display Name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="edit-tree-btn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/x-handlebars-template" id="trees-template">
         {{#each trees}}
-        <tr>
+        <tr id="tree-{{key}}">
             <td>{{key}}</td>
-            <td>{{displayName}}</td>
+            <td id="tree-display-name-{{key}}">{{displayName}}</td>
             <td>
                 <button class="btn btn-outline-info btn-sm">Root</button>
             </td>
             <td>
-                <button class="btn btn-outline-warning btn-sm">Edit</button>
+                <button class="btn btn-outline-warning btn-sm edit-tree-modal-btn" data-key="{{key}}" data-bs-toggle="modal" data-bs-target="#edit-tree-modal">Edit</button>
                 <button class="btn btn-outline-primary btn-sm">Activation</button>
                 <button class="btn btn-outline-danger btn-sm">Delete</button>
             </td>
