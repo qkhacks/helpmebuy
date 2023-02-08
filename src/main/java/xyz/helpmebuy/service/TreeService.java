@@ -96,6 +96,10 @@ public class TreeService {
         return treeRepository.findByActiveIsTrue();
     }
 
+    public List<Tree> listAll() {
+        return treeRepository.findAll();
+    }
+
     public TraversalResponse traverse(String key, String nodeId, List<Integer> optionChoices) {
         Node nextNode;
 

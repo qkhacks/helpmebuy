@@ -20,7 +20,19 @@ function createTree(key, displayName, rootNode, success, error) {
         }),
         success: success,
         error: error
-    })
+    });
+}
+
+function listTrees(success, error) {
+    $.ajax({
+        url: "/api/v1/trees/all",
+        type: "get",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
 }
 
 function getHeaders() {
@@ -29,18 +41,36 @@ function getHeaders() {
     }
 }
 
+const treesTemplate = Handlebars.compile($("#trees-template").html());
+
+function renderTrees() {
+    listTrees(function (data) {
+        $("#trees").append(treesTemplate({ trees: data }));
+    });
+}
+
 function setView() {
     if (localStorage.getItem("adminSecret")) {
-        $("#admin-view").show();
-        $("#secret-view").hide();
+        displayAdminView();
     } else {
-        $("#admin-view").hide();
-        $("#secret-view").show();
+        displaySecretView();
     }
+}
+
+function displaySecretView() {
+    $(".view").hide();
+    $("#secret-view").show();
+}
+
+function displayAdminView() {
+    $(".view").hide();
+    $("#admin-view").show();
+    renderTrees();
 }
 
 $(document).ready(function () {
     setView();
+
     $("#set-admin-secret-btn").click(function (e) {
         e.preventDefault();
         let secret = $("#set-admin-secret-input").val().trim();
@@ -73,6 +103,7 @@ $(document).ready(function () {
         createTree(key, displayName, null, function (data) {
             if (data.hasOwnProperty("id")) {
                 displaySuccess($("#add-tree-message"), "Tree added successfully");
+                $("#trees").prepend(treesTemplate({ trees: [data] }));
             } else {
                 displayError($("#add-tree-message"), data.message);
             }

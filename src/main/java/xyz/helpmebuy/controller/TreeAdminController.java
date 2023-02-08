@@ -9,6 +9,7 @@ import xyz.helpmebuy.request.TreeCreationRequest;
 import xyz.helpmebuy.request.TreeUpdateRequest;
 import xyz.helpmebuy.service.TreeService;
 
+import java.util.List;
 import java.util.logging.Level;
 
 @RestController
@@ -27,6 +28,11 @@ public class TreeAdminController extends AuthenticatedAdminController {
         return treeService.create(treeCreationRequest.getKey(),
                 treeCreationRequest.getDisplayName(),
                 treeCreationRequest.getRootNode());
+    }
+
+    @GetMapping(value = "/trees/all")
+    public List<Tree> listAll() {
+        return treeService.listAll();
     }
 
     @PutMapping(value = "/trees/{key}")
