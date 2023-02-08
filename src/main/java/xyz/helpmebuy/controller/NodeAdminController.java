@@ -26,7 +26,7 @@ public class NodeAdminController extends AuthenticatedAdminController {
                 nodeCreationRequest.getLeaf(),
                 nodeCreationRequest.getPrompt(),
                 nodeCreationRequest.getOptions(),
-                nodeCreationRequest.getLeaf(),
+                nodeCreationRequest.getMultipleOptionsChoiceAllowed(),
                 nodeCreationRequest.getProducts(),
                 nodeCreationRequest.getParentOptionChoices());
     }

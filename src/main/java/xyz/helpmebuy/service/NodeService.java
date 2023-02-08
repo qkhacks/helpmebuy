@@ -27,15 +27,13 @@ public class NodeService {
 
     public Node create(String parent, Boolean isLeaf, String prompt, List<Option> options, Boolean multipleOptionChoicesAllowed, List<String> products, List<Integer> parentOptionChoices) {
         if (isLeaf) {
-            if (null == products || products.isEmpty()) {
-                throw new ClientException("Products must be set for leaf node");
-            }
-
-            if (!productService.allExist(new HashSet<>(products))) {
-                throw new NotFoundException("Products not found");
+            if (null != products && !products.isEmpty()) {
+                if (!productService.allExist(new HashSet<>(products))) {
+                    throw new NotFoundException("Products not found");
+                }
             }
         } else {
-            if (null == prompt || null == options || prompt.isBlank() || options.isEmpty()) {
+            if (null == prompt || prompt.isBlank()) {
                 throw new ClientException("Node options info not set");
             }
         }

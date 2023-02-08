@@ -47,7 +47,7 @@ function getTree(key, success, error) {
     });
 }
 
-function updateTree(key, displayName, success, error) {
+function updateTree(key, displayName, rootNode, success, error) {
     $.ajax({
         url: "/api/v1/trees/" + key,
         type: "put",
@@ -55,7 +55,8 @@ function updateTree(key, displayName, success, error) {
         contentType: "application/json",
         headers: getHeaders(),
         data: JSON.stringify({
-            displayName: displayName
+            displayName: displayName,
+            rootNode: rootNode
         }),
         success: success,
         error: error
@@ -98,19 +99,91 @@ function deactivateTree(key, success, error) {
     });
 }
 
+function createNode(parent, isLeaf, prompt, options, multipleOptionChoicesAllowed, products, parentOptionChoices, success, error) {
+    $.ajax({
+        url: "/api/v1/nodes",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            parent: parent,
+            isLeaf: isLeaf,
+            prompt: prompt,
+            options: options,
+            multipleOptionChoicesAllowed: multipleOptionChoicesAllowed,
+            products: products,
+            parentOptionChoices: parentOptionChoices,
+        }),
+        success: success,
+        error: error
+    });
+}
+
+function getNode(nodeId, success, error) {
+    $.ajax({
+        url: "/api/v1/nodes/" + nodeId,
+        type: "get",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
+function updateNode(nodeId, prompt, options, multipleOptionChoicesAllowed, products, success, error) {
+    $.ajax({
+        url: "/api/v1/nodes/" + nodeId,
+        type: "put",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            prompt: prompt,
+            options: options,
+            multipleOptionChoicesAllowed: multipleOptionChoicesAllowed,
+            products: products
+        }),
+        success: success,
+        error: error
+    });
+}
+
+function deleteNode(nodeId, success, error) {
+    $.ajax({
+        url: "/api/v1/nodes/" + nodeId,
+        type: "delete",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
     }
 }
 
+
 const body = $("body");
 
 const treesTemplate = Handlebars.compile($("#trees-template").html());
+let treeKey = null;
+let nodeId = null;
 
 function renderTrees() {
     listTrees(function (data) {
         $("#trees").append(treesTemplate({ trees: data }));
+    });
+}
+
+function renderTreeNode() {
+    getNode(nodeId, function (data) {
+        console.log(data);
     });
 }
 
@@ -131,6 +204,17 @@ function displayAdminView() {
     $(".view").hide();
     $("#admin-view").show();
     renderTrees();
+}
+
+function displayTreeView() {
+    $(".view").hide();
+
+    if (nodeId == null) {
+        $("#root-view").show();
+    } else {
+        $("#tree-view").show();
+        renderTreeNode();
+    }
 }
 
 $(document).ready(function () {
@@ -200,7 +284,7 @@ $(document).ready(function () {
             return;
         }
 
-        updateTree(key, displayName, function (data) {
+        updateTree(key, displayName, null, function (data) {
             if (data.hasOwnProperty("id")) {
                 displaySuccess($("#edit-tree-message"), "Changes saved successfully");
                 $("#tree-display-name-" + data.key).html(data.displayName);
@@ -286,5 +370,47 @@ $(document).ready(function () {
                 displayError($("#tree-activation-message"), data.responseJSON.message);
             });
         }
+    });
+
+    body.on("click", ".tree-root-btn", function (e) {
+        e.preventDefault();
+        treeKey = $(this).data("key");
+        getTree(treeKey, function (data) {
+            nodeId = data.rootNode;
+            displayTreeView();
+        });
+    });
+
+    $("#add-tree-root-btn").click(function (e) {
+        e.preventDefault();
+
+        let prompt = $("#add-tree-root-prompt").val().trim();
+
+        if (prompt === "") {
+            displayError($("#add-tree-root-message"), "Prompt is required");
+            return;
+        }
+
+        let isLeaf = $("#add-tree-root-is-leaf").is(":checked");
+
+        createNode(null, isLeaf, prompt, null, null, null, null, function (data) {
+            if (data.hasOwnProperty("id")) {
+                nodeId = data.id;
+                updateTree(treeKey, null, nodeId, function (data) {
+                    if (data.hasOwnProperty("id")) {
+                        displayTreeView();
+                        $("#add-tree-root-modal").modal("toggle");
+                    } else {
+                        displayError($("#add-tree-root-message"), data.message);
+                    }
+                }, function (data) {
+                    displayError($("#add-tree-root-message"), data.responseJSON.message);
+                });
+            } else {
+                displayError($("#add-tree-root-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#add-tree-root-message"), data.responseJSON.message);
+        });
     });
 });

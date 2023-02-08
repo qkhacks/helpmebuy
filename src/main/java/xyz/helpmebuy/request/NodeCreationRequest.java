@@ -1,5 +1,6 @@
 package xyz.helpmebuy.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import xyz.helpmebuy.embedded.Option;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ public class NodeCreationRequest implements Serializable {
 
     private String parent;
 
+    @JsonProperty("isLeaf")
     private Boolean isLeaf;
 
     private String prompt;
