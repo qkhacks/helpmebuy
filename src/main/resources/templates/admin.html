@@ -142,6 +142,32 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="tree-activation-modal" tabindex="-1" aria-labelledby="tree-activation-modal-label"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="tree-activation-modal-label">Delete Tree</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="tree-activation-message"></div>
+                    <form>
+                        <input type="hidden" id="tree-activation-key">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="tree-activation-check">
+                            <label class="form-check-label" for="tree-activation-check">
+                                Activate
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/x-handlebars-template" id="trees-template">
         {{#each trees}}
         <tr id="tree-{{key}}">
@@ -153,7 +179,7 @@
             <td>
                 <button class="btn btn-outline-warning btn-sm edit-tree-modal-btn" data-key="{{key}}" data-bs-toggle="modal" data-bs-target="#edit-tree-modal">Edit</button>
                 <button class="btn btn-outline-danger btn-sm delete-tree-modal-btn" data-key="{{key}}" data-bs-toggle="modal" data-bs-target="#delete-tree-modal">Delete</button>
-                <button class="btn btn-outline-primary btn-sm">Activation</button>
+                <button class="btn btn-outline-primary btn-sm tree-activation-modal-btn" data-key="{{key}}" data-bs-toggle="modal" data-bs-target="#tree-activation-modal">Activation</button>
             </td>
         </tr>
         {{/each}}

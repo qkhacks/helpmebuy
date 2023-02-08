@@ -74,6 +74,30 @@ function deleteTree(key, success, error) {
     });
 }
 
+function activateTree(key, success, error) {
+    $.ajax({
+        url: "/api/v1/trees/" + key + "/activate",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
+function deactivateTree(key, success, error) {
+    $.ajax({
+        url: "/api/v1/trees/" + key + "/deactivate",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
@@ -220,5 +244,47 @@ $(document).ready(function () {
         }, function (data) {
             displayError($("#delete-tree-message"), data.responseJSON.message);
         });
+    });
+
+    body.on("click", ".tree-activation-modal-btn", function (e) {
+        let treeKey = $(this).data("key");
+        $("#tree-activation-key").val(treeKey);
+        getTree(treeKey, function (data) {
+            $("#tree-activation-check").prop("checked", data.active);
+        });
+    });
+
+    $("#tree-activation-check").change(function (e) {
+        e.preventDefault();
+        let key = $("#tree-activation-key").val().trim();
+
+        if (key === "") {
+            displayError($("#tree-activation-message"), "Tree is not selected");
+            return;
+        }
+
+        let checked = $(this).is(":checked");
+
+        if (checked) {
+            activateTree(key, function (data) {
+                if (data.hasOwnProperty("id")) {
+                    displaySuccess($("#tree-activation-message"), "Tree activated successfully");
+                } else {
+                    displayError($("#tree-activation-message"), data.message);
+                }
+            }, function (data) {
+                displayError($("#tree-activation-message"), data.responseJSON.message);
+            });
+        } else {
+            deactivateTree(key, function (data) {
+                if (data.hasOwnProperty("id")) {
+                    displaySuccess($("#tree-activation-message"), "Tree deactivated successfully");
+                } else {
+                    displayError($("#tree-activation-message"), data.message);
+                }
+            }, function (data) {
+                displayError($("#tree-activation-message"), data.responseJSON.message);
+            });
+        }
     });
 });

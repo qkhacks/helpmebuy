@@ -10,7 +10,6 @@ import xyz.helpmebuy.request.TreeUpdateRequest;
 import xyz.helpmebuy.service.TreeService;
 
 import java.util.List;
-import java.util.logging.Level;
 
 @RestController
 @RequestMapping(value = "/api/v1")
