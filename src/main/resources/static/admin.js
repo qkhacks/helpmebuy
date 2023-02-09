@@ -172,6 +172,8 @@ function getHeaders() {
 const body = $("body");
 
 const treesTemplate = Handlebars.compile($("#trees-template").html());
+const optionsTemplate = Handlebars.compile($("#options-template").html());
+
 let treeKey = null;
 let nodeId = null;
 
@@ -181,10 +183,14 @@ function renderTrees() {
     });
 }
 
-function renderTreeNode() {
-    getNode(nodeId, function (data) {
-        console.log(data);
-    });
+function renderTreeNode(node) {
+    console.log(node);
+    $("#prompt").html(node.prompt);
+    $("#options").html(optionsTemplate({ options: node.options }));
+}
+
+function renderTreeLeaf(node) {
+    console.log(node);
 }
 
 function setView() {
@@ -212,8 +218,15 @@ function displayTreeView() {
     if (nodeId == null) {
         $("#root-view").show();
     } else {
-        $("#tree-view").show();
-        renderTreeNode();
+        getNode(nodeId, function (data) {
+            if (data.isLeaf) {
+                $("#leaf-view").show();
+                renderTreeLeaf(data);
+            } else {
+                $("#tree-view").show();
+                renderTreeNode(data);
+            }
+        });
     }
 }
 
@@ -411,6 +424,44 @@ $(document).ready(function () {
             }
         }, function (data) {
             displayError($("#add-tree-root-message"), data.responseJSON.message);
+        });
+    });
+
+    $("#add-option-btn").click(function (e) {
+        e.preventDefault();
+
+        let text = $("#add-option-text").val();
+
+        if (text === "") {
+            displayError($("#add-option-message"), "Option text is required");
+            return;
+        }
+
+        getNode(nodeId, function (data) {
+            if (data.hasOwnProperty("id")) {
+                if (data.options == null) {
+                    data.options = [];
+                }
+
+                data.options.push({
+                    text: text
+                });
+
+                updateNode(nodeId, data.prompt, data.options, data.multipleOptionChoicesAllowed, data.products, function (data) {
+                    if (data.hasOwnProperty("id")) {
+                        $("#add-option-modal").modal("toggle");
+                        $("#options").html(optionsTemplate({ options: data.options }));
+                    } else {
+                        displayError($("#add-option-message"), data.message);
+                    }
+                }, function (data) {
+                    displayError($("#add-option-message"), data.responseJSON.message);
+                });
+            } else {
+                displayError($("#add-option-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#add-option-message"), data.responseJSON.message);
         });
     });
 });
