@@ -105,17 +105,14 @@ public class NodeService {
         Node node = get(nodeId);
 
         if (node.getLeaf()) {
-            if (null != products && !products.isEmpty()) {
-                node.setProducts(products);
-            }
+
+            node.setProducts(products);
         } else {
             if (null != prompt && !prompt.isBlank()) {
                 node.setPrompt(prompt);
             }
 
-            if (null != options && !options.isEmpty()){
-                node.setOptions(options);
-            }
+            node.setOptions(options);
 
             if (null != multipleOptionChoicesAllowed) {
                 node.setMultipleOptionChoicesAllowed(multipleOptionChoicesAllowed);

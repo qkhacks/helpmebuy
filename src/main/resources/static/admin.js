@@ -464,4 +464,48 @@ $(document).ready(function () {
             displayError($("#add-option-message"), data.responseJSON.message);
         });
     });
+
+    body.on("click", ".delete-option-modal-btn", function (e) {
+        let index = $(this).data("index");
+        $("#delete-option-index").val(index);
+    });
+
+    $("#delete-option-btn").click(function (e) {
+        let index = $("#delete-option-index").val().trim();
+
+        if (index === "") {
+            displayError($("#delete-option-message"), "Option is not selected");
+            return;
+        }
+
+        index = parseInt(index);
+
+        getNode(nodeId, function (data) {
+            if (data.hasOwnProperty("id")) {
+                let newOptions = [];
+                for (let i = 0; i < data.options.length; i++) {
+                    if (i == index) {
+                        continue;
+                    }
+
+                    newOptions.push(data.options[i]);
+                }
+
+                updateNode(nodeId, data.prompt, newOptions, data.multipleOptionChoicesAllowed, data.products, function (data) {
+                    if (data.hasOwnProperty("id")) {
+                        $("#delete-option-modal").modal("toggle");
+                        $("#option-" + index).remove();
+                    } else {
+                        displayError($("#delete-option-message"), data.message);
+                    }
+                }, function (data) {
+                    displayError($("#delete-option-message"), data.responseJSON.message);
+                });
+            } else {
+                displayError($("#delete-option-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#delete-option-message"), data.responseJSON.message);
+        });
+    });
 });
