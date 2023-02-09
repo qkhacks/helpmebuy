@@ -186,6 +186,7 @@ function renderTrees() {
 function renderTreeNode(node) {
     console.log(node);
     $("#prompt").html(node.prompt);
+    $("#edit-node-prompt").val(node.prompt);
     $("#options").html(optionsTemplate({ options: node.options }));
 }
 
@@ -507,5 +508,35 @@ $(document).ready(function () {
         }, function (data) {
             displayError($("#delete-option-message"), data.responseJSON.message);
         });
+    });
+
+    $("#edit-node-btn").click(function (e) {
+        e.preventDefault();
+
+        let prompt = $("#edit-node-prompt").val();
+
+        if (prompt === "") {
+            displayError($("#edit-node-message"), "Prompt is required");
+            return;
+        }
+
+        getNode(nodeId, function (data) {
+            if (data.hasOwnProperty("id")) {
+                updateNode(nodeId, prompt, data.options, data.multipleOptionChoicesAllowed, data.products, function (data) {
+                    if (data.hasOwnProperty("id")) {
+                        displaySuccess($("#edit-node-message"), "Changes saved successfully");
+                        $("#prompt").html(data.prompt);
+                    } else {
+                        displayError($("#edit-node-message"), data.message);
+                    }
+                }, function (data) {
+                    displayError($("#edit-node-message"), data.responseJSON.message);
+                });
+            } else {
+                displayError($("#edit-node-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#edit-node-message"), data.responseJSON.message);
+        })
     });
 });

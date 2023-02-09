@@ -77,7 +77,8 @@
                             <h1 id="prompt"></h1>
                         </div>
                         <div class="col-lg-2">
-                            <button class="btn btn-warning">Edit</button>
+                            <button class="btn btn-warning" data-bs-toggle="modal"
+                                data-bs-target="#edit-node-modal">Edit</button>
                         </div>
                     </div>
                     <div class="row">
@@ -288,6 +289,30 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger" id="delete-option-btn">Delete Option</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edit-node-modal" tabindex="-1" aria-labelledby="edit-node-modal-label"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="edit-node-modal-label">Edit Node</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="edit-node-message"></div>
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Prompt</label>
+                            <input type="text" class="form-control" id="edit-node-prompt" placeholder="Node Prompt">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="edit-node-btn">Save Changes</button>
                 </div>
             </div>
         </div>
