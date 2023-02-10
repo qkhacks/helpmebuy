@@ -193,7 +193,7 @@ let nodeId = null;
 
 function renderTrees() {
     listTrees(function (data) {
-        $("#trees").append(treesTemplate({ trees: data }));
+        $("#trees").html(treesTemplate({ trees: data }));
     });
 }
 
@@ -222,9 +222,13 @@ function renderTreeLeaf(node) {
     console.log(node);
 }
 
-function setView() {
+function setView(target) {
     if (localStorage.getItem("adminSecret")) {
-        displayAdminView();
+        if (target === "products") {
+            displayProductsView();
+        } else {
+            displayTreesView();
+        }
     } else {
         displaySecretView();
     }
@@ -235,9 +239,9 @@ function displaySecretView() {
     $("#secret-view").show();
 }
 
-function displayAdminView() {
+function displayTreesView() {
     $(".view").hide();
-    $("#admin-view").show();
+    $("#trees-view").show();
     renderTrees();
 }
 
@@ -259,8 +263,19 @@ function displayTreeView() {
     }
 }
 
+function displayProductsView() {
+    $(".view").hide();
+    $("#products-view").show();
+}
+
 $(document).ready(function () {
-    setView();
+    setView("trees");
+
+    body.on("click", ".tab-btn", function (e) {
+        e.preventDefault();
+        let target = $(this).data("target");
+        setView(target);
+    });
 
     $("#set-admin-secret-btn").click(function (e) {
         e.preventDefault();
@@ -632,7 +647,7 @@ $(document).ready(function () {
             if (data.hasOwnProperty("id")) {
                 $("#add-route-modal").modal("toggle");
                 data["parentOptionChoices"] = parentOptions;
-                $("#routes").append(routesTemplate({ routes: [data] }));
+                $("#routes").prepend(routesTemplate({ routes: [data] }));
             } else {
                 displayError($("#add-route-message"), data.message);
             }
