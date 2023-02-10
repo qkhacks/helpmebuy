@@ -9,6 +9,8 @@ import xyz.helpmebuy.request.NodeCreationRequest;
 import xyz.helpmebuy.request.NodeUpdateRequest;
 import xyz.helpmebuy.service.NodeService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/v1")
 public class NodeAdminController extends AuthenticatedAdminController {
@@ -48,5 +50,10 @@ public class NodeAdminController extends AuthenticatedAdminController {
     @DeleteMapping(value = "/nodes/{nodeId}")
     public Node delete(@PathVariable String nodeId) {
         return nodeService.delete(nodeId);
+    }
+
+    @GetMapping(value = "/nodes/{nodeId}/children")
+    public List<Node> listChildren(@PathVariable String nodeId) {
+        return nodeService.listChildren(nodeId);
     }
 }

@@ -162,6 +162,18 @@ function deleteNode(nodeId, success, error) {
     });
 }
 
+function listNodeChildren(nodeId, success, error) {
+    $.ajax({
+        url: "/api/v1/nodes/" + nodeId + "/children",
+        type: "get",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
@@ -173,6 +185,8 @@ const body = $("body");
 
 const treesTemplate = Handlebars.compile($("#trees-template").html());
 const optionsTemplate = Handlebars.compile($("#options-template").html());
+const routesTemplate = Handlebars.compile($("#routes-template").html());
+const parentOptionsInputTemplate = Handlebars.compile($("#parent-options-input-template").html());
 
 let treeKey = null;
 let nodeId = null;
@@ -184,10 +198,22 @@ function renderTrees() {
 }
 
 function renderTreeNode(node) {
-    console.log(node);
     $("#prompt").html(node.prompt);
     $("#edit-node-prompt").val(node.prompt);
     $("#options").html(optionsTemplate({ options: node.options }));
+
+    listNodeChildren(node.id, function (data) {
+        let nodeToRouteMap = {};
+
+        node.routes.forEach(route => {
+            nodeToRouteMap[route["child"]] = route["optionChoices"]
+        });
+
+        data.forEach(node => {
+            node["parentOptionChoices"] = nodeToRouteMap[node.id];
+        });
+        $("#routes").html(routesTemplate({ routes: data }));
+    });
 }
 
 function renderTreeLeaf(node) {
@@ -538,5 +564,53 @@ $(document).ready(function () {
         }, function (data) {
             displayError($("#edit-node-message"), data.responseJSON.message);
         })
+    });
+
+    $("#add-route-modal-btn").click(function (e) {
+        getNode(nodeId, function (data) {
+            $("#add-tree-node-parent-options").html(parentOptionsInputTemplate({ options: data.options }));
+        });
+    });
+
+    $("#add-route-btn").click(function (e) {
+        e.preventDefault();
+
+        let prompt = $("#add-tree-node-prompt").val().trim();
+        let isLeaf = $("#add-tree-node-is-leaf").is(":checked");
+
+        if (isLeaf) {
+            prompt = null;
+        } else {
+            if (prompt === "") {
+                displayError($("#add-route-message"), "Prompt is required");
+                return;
+            }
+        }
+
+        let parentOptions = [];
+
+        $(".add-tree-node-parent-option").each(function () {
+            if ($(this).is(":checked")) {
+                parentOptions.push(parseInt($(this).data("index")));
+            }
+        });
+
+        createNode(nodeId, isLeaf, prompt, null, null, null, parentOptions, function (data) {
+            if (data.hasOwnProperty("id")) {
+                $("#add-route-modal").modal("toggle");
+                data["parentOptionChoices"] = parentOptions;
+                $("#routes").append(routesTemplate({ routes: [data] }));
+            } else {
+                displayError($("#add-route-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#add-route-message"), data.responseJSON.message);
+        });
+    });
+
+    body.on("click", ".go-to-node-btn", function (e) {
+        e.preventDefault();
+        nodeId = $(this).data("id");
+        displayTreeView();
     });
 });

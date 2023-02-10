@@ -6,38 +6,38 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.2.3/lux/bootstrap.min.css"
-          integrity="sha512-+TCHrZDlJaieLxYGAxpR5QgMae/jFXNkrc6sxxYsIVuo/28nknKtf9Qv+J2PqqPXj0vtZo9AKW/SMWXe8i/o6w=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-+TCHrZDlJaieLxYGAxpR5QgMae/jFXNkrc6sxxYsIVuo/28nknKtf9Qv+J2PqqPXj0vtZo9AKW/SMWXe8i/o6w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-<div class="container">
-    <div class="row" style="margin-top: 3rem;">
-        <div class="col-lg-6 offset-lg-3">
-            <h1 class="display-1 text-center">Help Me Buy A</h1>
-            <div class="dropdown" style="margin-top: 2rem;">
-                <button class="btn btn-lg btn-outline-primary dropdown-toggle w-100" type="button"
+    <div class="container">
+        <div class="row" style="margin-top: 3rem;">
+            <div class="col-lg-6 offset-lg-3">
+                <h1 class="display-1 text-center">Help Me Buy A</h1>
+                <div class="dropdown" style="margin-top: 2rem;">
+                    <button class="btn btn-lg btn-outline-primary dropdown-toggle w-100" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false" id="select-tree-btn" style="font-size: 1.5rem;">
-                    Select Product
-                </button>
-                <ul class="dropdown-menu w-100" id="tree-list">
-                </ul>
+                        Select Product
+                    </button>
+                    <ul class="dropdown-menu w-100" id="tree-list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 5rem;">
+            <div class="col-lg-6 offset-lg-3">
+                <div id="message"></div>
+                <div id="view"></div>
             </div>
         </div>
     </div>
-    <div class="row" style="margin-top: 5rem;">
-        <div class="col-lg-6 offset-lg-3">
-            <div id="message"></div>
-            <div id="view"></div>
-        </div>
-    </div>
-</div>
-<script type="text/x-handlebars-template" id="tree-list-template">
+    <script type="text/x-handlebars-template" id="tree-list-template">
     {{#each trees}}
     <li><a data-key="{{key}}" class="dropdown-item tree-selector" href="#" data-display-name="{{displayName}}" style="font-size: 1.5rem;">{{displayName}}</a></li>
     {{/each}}
 </script>
-<script type="text/x-handlebars-template" id="question-template">
+    <script type="text/x-handlebars-template" id="question-template">
     <figure class="text-center">
         <blockquote class="blockquote">
             <p class="mb-0" style="font-size: 2rem;">{{node.prompt}}</p>
@@ -45,12 +45,12 @@
     </figure>
     <ul class="list-group">
         {{#each node.options}}
-        <li data-id="{{id}}" class="list-group-item text-center option-choice" style="font-size: 1.5rem; padding: 2rem; cursor: pointer;">{{text}}</li>
+        <li data-id="{{@index}}" class="list-group-item text-center option-choice" style="font-size: 1.5rem; padding: 2rem; cursor: pointer;">{{text}}</li>
         {{/each}}
     </ul>
     <button style="margin-top: 1rem; font-size: 1.5rem;" class="btn btn-info btn-lg w-100" id="next-btn">Next ></button>
 </script>
-<script type="text/x-handlebars-template" id="products-template">
+    <script type="text/x-handlebars-template" id="products-template">
     <div class="row">
         {{#each products}}
         <div class="col-lg-6">
@@ -78,16 +78,16 @@
         {{/each}}
     </div>
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
         integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
         integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script type="text/javascript" src="/app.js"></script>
+    <script type="text/javascript" src="/app.js"></script>
 </body>
 
 </html>

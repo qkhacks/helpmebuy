@@ -83,6 +83,10 @@ public class NodeService {
         return nodeRepository.findById(nodeId).orElseThrow();
     }
 
+    public List<Node> get(List<String> nodeIds) {
+        return nodeRepository.findByIdIn(nodeIds);
+    }
+
     public Node getNextNode(String nodeId, List<Integer> optionChoices) {
         Node currentNode = get(nodeId);
 
@@ -132,6 +136,18 @@ public class NodeService {
         }
 
         return node;
+    }
+
+    public List<Node> listChildren(String nodeId) {
+        Node node = get(nodeId);
+
+        List<String> childrenIds = node.getChildren();
+
+        if (null == childrenIds || childrenIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return get(childrenIds);
     }
 
     public Boolean exists(String nodeId) {
