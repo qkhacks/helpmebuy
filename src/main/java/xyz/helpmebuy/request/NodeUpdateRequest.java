@@ -11,7 +11,7 @@ public class NodeUpdateRequest implements Serializable {
 
     private List<Option> options;
 
-    private Boolean multipleOptionsChoiceAllowed;
+    private Boolean multipleOptionChoicesAllowed;
 
     private List<String> products;
 
@@ -19,10 +19,10 @@ public class NodeUpdateRequest implements Serializable {
 
     }
 
-    public NodeUpdateRequest(String prompt, List<Option> options, Boolean multipleOptionsChoiceAllowed, List<String> products) {
+    public NodeUpdateRequest(String prompt, List<Option> options, Boolean multipleOptionChoicesAllowed, List<String> products) {
         this.prompt = prompt;
         this.options = options;
-        this.multipleOptionsChoiceAllowed = multipleOptionsChoiceAllowed;
+        this.multipleOptionChoicesAllowed = multipleOptionChoicesAllowed;
         this.products = products;
     }
 
@@ -42,12 +42,12 @@ public class NodeUpdateRequest implements Serializable {
         this.options = options;
     }
 
-    public Boolean getMultipleOptionsChoiceAllowed() {
-        return multipleOptionsChoiceAllowed;
+    public Boolean getMultipleOptionChoicesAllowed() {
+        return multipleOptionChoicesAllowed;
     }
 
-    public void setMultipleOptionsChoiceAllowed(Boolean multipleOptionsChoiceAllowed) {
-        this.multipleOptionsChoiceAllowed = multipleOptionsChoiceAllowed;
+    public void setMultipleOptionChoicesAllowed(Boolean multipleOptionChoicesAllowed) {
+        this.multipleOptionChoicesAllowed = multipleOptionChoicesAllowed;
     }
 
     public List<String> getProducts() {

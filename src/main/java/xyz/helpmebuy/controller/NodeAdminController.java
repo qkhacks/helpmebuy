@@ -43,7 +43,7 @@ public class NodeAdminController extends AuthenticatedAdminController {
         return nodeService.update(nodeId,
                 nodeUpdateRequest.getPrompt(),
                 nodeUpdateRequest.getOptions(),
-                nodeUpdateRequest.getMultipleOptionsChoiceAllowed(),
+                nodeUpdateRequest.getMultipleOptionChoicesAllowed(),
                 nodeUpdateRequest.getProducts());
     }
 

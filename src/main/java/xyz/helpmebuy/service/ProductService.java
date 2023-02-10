@@ -49,6 +49,10 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public List<Product> list() {
+        return productRepository.findAll();
+    }
+
     public Product get(String productId) {
         return productRepository.findById(productId).orElseThrow();
     }

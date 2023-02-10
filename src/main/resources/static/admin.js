@@ -201,6 +201,8 @@ function renderTreeNode(node) {
     $("#prompt").html(node.prompt);
     $("#edit-node-prompt").val(node.prompt);
     $("#options").html(optionsTemplate({ options: node.options }));
+    $("#multiple-option-choices-allowed-check").prop("checked", node.multipleOptionChoicesAllowed);
+    $("#multiple-option-choices-allowed-message").html("");
 
     listNodeChildren(node.id, function (data) {
         let nodeToRouteMap = {};
@@ -564,6 +566,37 @@ $(document).ready(function () {
         }, function (data) {
             displayError($("#edit-node-message"), data.responseJSON.message);
         })
+    });
+
+    $("#multiple-option-choices-allowed-check").change(function (e) {
+        e.preventDefault();
+        let multipleOptionChoicesAllowed = $(this).is(":checked");
+
+        getNode(nodeId, function (data) {
+            if (data.hasOwnProperty("id")) {
+                updateNode(nodeId, data.prompt, data.options, multipleOptionChoicesAllowed, data.products, function (data) {
+                    if (data.hasOwnProperty("id")) {
+                        let message = "";
+
+                        if (multipleOptionChoicesAllowed) {
+                            message = "Enabled multiple option choices";
+                        } else {
+                            message = "Disabled multiple option choices";
+                        }
+
+                        displaySuccess($("#multiple-option-choices-allowed-message"), message);
+                    } else {
+                        displayError($("#multiple-option-choices-allowed-message"), data.message);
+                    }
+                }, function (data) {
+                    displayError($("#multiple-option-choices-allowed-message"), data.responseJSON.message);
+                });
+            } else {
+                displayError($("#multiple-option-choices-allowed-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#multiple-option-choices-allowed-message"), data.responseJSON.message);
+        });
     });
 
     $("#add-route-modal-btn").click(function (e) {

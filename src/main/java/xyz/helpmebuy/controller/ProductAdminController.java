@@ -9,6 +9,8 @@ import xyz.helpmebuy.request.ProductCreationRequest;
 import xyz.helpmebuy.request.ProductUpdateRequest;
 import xyz.helpmebuy.service.ProductService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/v1")
 public class ProductAdminController extends AuthenticatedAdminController {
@@ -28,6 +30,11 @@ public class ProductAdminController extends AuthenticatedAdminController {
                 productCreationRequest.getImageUrl(),
                 productCreationRequest.getAttributes(),
                 productCreationRequest.getLinks());
+    }
+
+    @GetMapping(value = "/products")
+    public List<Product> list() {
+        return productService.list();
     }
 
     @GetMapping(value = "/products/{productId}")

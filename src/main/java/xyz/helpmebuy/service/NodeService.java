@@ -109,7 +109,6 @@ public class NodeService {
         Node node = get(nodeId);
 
         if (node.getLeaf()) {
-
             node.setProducts(products);
         } else {
             if (null != prompt && !prompt.isBlank()) {
