@@ -174,6 +174,26 @@ function listNodeChildren(nodeId, success, error) {
     });
 }
 
+function addProduct(type, name, description, imageUrl, attributes, links, success, error) {
+    $.ajax({
+        url: "/api/v1/products",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        data: JSON.stringify({
+            type: type,
+            name: name,
+            description: description,
+            imageUrl: imageUrl,
+            attributes: attributes,
+            links: links
+        }),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
@@ -187,6 +207,8 @@ const treesTemplate = Handlebars.compile($("#trees-template").html());
 const optionsTemplate = Handlebars.compile($("#options-template").html());
 const routesTemplate = Handlebars.compile($("#routes-template").html());
 const parentOptionsInputTemplate = Handlebars.compile($("#parent-options-input-template").html());
+const addProductAttributeTemplate = Handlebars.compile($("#add-product-attribute-template").html());
+const addProductLinkTemplate = Handlebars.compile($("#add-product-link-template").html());
 
 let treeKey = null;
 let nodeId = null;
@@ -660,5 +682,87 @@ $(document).ready(function () {
         e.preventDefault();
         nodeId = $(this).data("id");
         displayTreeView();
+    });
+
+    let addProductAttributesIndex = 1;
+    let addProductLinksIndex = 1;
+    $("#add-product-attributes").append(addProductAttributeTemplate({ index: addProductAttributesIndex }));
+    $("#add-product-links").append(addProductLinkTemplate({ index: addProductLinksIndex }));
+    $("#add-product-attribute-btn").click(function (e) {
+        e.preventDefault();
+        addProductAttributesIndex++;
+        $("#add-product-attributes").append(addProductAttributeTemplate({ index: addProductAttributesIndex }));
+    });
+    $("#add-product-link-btn").click(function (e) {
+        e.preventDefault();
+        addProductLinksIndex++;
+        $("#add-product-links").append(addProductLinkTemplate({ index: addProductLinksIndex }));
+    });
+
+    $("#add-product-btn").click(function (e) {
+        e.preventDefault();
+
+        let type = $("#add-product-type").val().trim();
+
+        if (type === "") {
+            displayError($("#add-product-message"), "Type is required");
+            return;
+        }
+
+        let name = $("#add-product-name").val().trim();
+
+        if (name === "") {
+            displayError($("#add-product-message"), "Name is required");
+            return;
+        }
+
+        let description = $("#add-product-description").val();
+        let imageUrl = $("#add-product-image-url").val().trim();
+
+        if (imageUrl === "") {
+            displayError($("#add-product-message"), "Image URL is required");
+            return;
+        }
+
+        let attributes = {};
+
+        for (let i = 1; i <= addProductAttributesIndex; i++) {
+            let key = $("#add-product-attribute-key-" + i).val().trim();
+            let value = $("#add-product-attribute-value-" + i).val().trim();
+
+            if (key === "" || value === "") {
+                continue;
+            }
+
+            attributes[key] = value;
+        }
+
+        let links = [];
+
+        for (let i = 1; i <= addProductLinksIndex; i++) {
+            let link = $("#add-product-link-link-" + i).val().trim();
+            let text = $("#add-product-link-text-" + i).val().trim();
+            let icon = $("#add-product-link-icon-" + i).val().trim();
+
+            if (link === "" || text === "" || icon === "") {
+                continue;
+            }
+
+            links.push({
+                link: link,
+                text: text,
+                icon: icon
+            });
+        }
+
+        addProduct(type, name, description, imageUrl, attributes, links, function (data) {
+            if (data.hasOwnProperty("id")) {
+                displaySuccess($("#add-product-message"), "Product added successfully");
+            } else {
+                displayError($("#add-product-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#add-product-message"), data.responseJSON.message);
+        });
     });
 });
