@@ -206,6 +206,18 @@ function listProducts(success, error) {
     });
 }
 
+function deleteProduct(productId, success, error) {
+    $.ajax({
+        url: "/api/v1/products/" + productId,
+        type: "delete",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
@@ -783,6 +795,40 @@ $(document).ready(function () {
             }
         }, function (data) {
             displayError($("#add-product-message"), data.responseJSON.message);
+        });
+    });
+
+    body.on("click", ".delete-product-modal-btn", function (e) {
+        let productId = $(this).data("id");
+        $("#delete-product-id").val(productId);
+    });
+
+    $("#delete-product-btn").click(function (e) {
+        e.preventDefault();
+
+        let productId = $("#delete-product-id").val().trim();
+
+        if (productId === "") {
+            displayError($("#delete-product-message"), "Product is not selected");
+            return;
+        }
+
+        let confirmation = $("#delete-product-confirmation").val();
+
+        if (confirmation !== "yes") {
+            displayError($("#delete-product-message"), "Please confirm deletion of the product below");
+            return;
+        }
+
+        deleteProduct(productId, function (data) {
+            if (data.hasOwnProperty("id")) {
+                $("#delete-product-modal").modal("toggle");
+                $("#product-" + productId).remove();
+            } else {
+                displayError($("#delete-product-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#delete-product-message"), data.responseJSON.message);
         });
     });
 });
