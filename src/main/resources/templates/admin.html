@@ -560,6 +560,17 @@
             </div>
         </div>
     </script>
+    <script type="text/x-handlebars-template" id="products-template">
+        {{#each products}}
+        <tr id="product-{{id}}">
+            <td>{{name}}</td>
+            <td>
+                <button class="btn btn-outline-warning btn-sm">Edit</button>
+                <button class="btn btn-outline-danger btn-sm">Delete</button>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
         integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

@@ -194,12 +194,23 @@ function addProduct(type, name, description, imageUrl, attributes, links, succes
     });
 }
 
+function listProducts(success, error) {
+    $.ajax({
+        url: "/api/v1/products",
+        type: "get",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
     }
 }
-
 
 const body = $("body");
 
@@ -209,6 +220,7 @@ const routesTemplate = Handlebars.compile($("#routes-template").html());
 const parentOptionsInputTemplate = Handlebars.compile($("#parent-options-input-template").html());
 const addProductAttributeTemplate = Handlebars.compile($("#add-product-attribute-template").html());
 const addProductLinkTemplate = Handlebars.compile($("#add-product-link-template").html());
+const productsTemplate = Handlebars.compile($("#products-template").html());
 
 let treeKey = null;
 let nodeId = null;
@@ -242,6 +254,12 @@ function renderTreeNode(node) {
 
 function renderTreeLeaf(node) {
     console.log(node);
+}
+
+function renderProducts() {
+    listProducts(function (data) {
+        $("#products").html(productsTemplate({ products: data }));
+    });
 }
 
 function setView(target) {
@@ -288,6 +306,7 @@ function displayTreeView() {
 function displayProductsView() {
     $(".view").hide();
     $("#products-view").show();
+    renderProducts();
 }
 
 $(document).ready(function () {
@@ -758,6 +777,7 @@ $(document).ready(function () {
         addProduct(type, name, description, imageUrl, attributes, links, function (data) {
             if (data.hasOwnProperty("id")) {
                 displaySuccess($("#add-product-message"), "Product added successfully");
+                $("#products").prepend(productsTemplate({ products: [data] }));
             } else {
                 displayError($("#add-product-message"), data.message);
             }
