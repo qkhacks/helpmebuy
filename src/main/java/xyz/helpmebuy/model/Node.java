@@ -1,5 +1,6 @@
 package xyz.helpmebuy.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import xyz.helpmebuy.embedded.Option;
@@ -19,6 +20,7 @@ public class Node implements Serializable {
 
     private String parent;
 
+    @JsonProperty("isLeaf")
     private Boolean isLeaf;
 
     private String prompt;
