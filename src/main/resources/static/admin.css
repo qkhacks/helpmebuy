@@ -1,0 +1,25 @@
+.auto-selected {
+    display: block;
+    cursor: pointer;
+}
+
+.auto-results-wrapper ul {
+    list-style: none;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.auto-results-wrapper li {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.auto-results-wrapper.auto-is-active {
+    position: static
+}
+
+.auto-clear {
+    display: none;
+}

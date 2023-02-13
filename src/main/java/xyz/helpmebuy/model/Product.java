@@ -1,6 +1,8 @@
 package xyz.helpmebuy.model;
 
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.TextScore;
 import xyz.helpmebuy.embedded.Link;
 
 import java.io.Serializable;
@@ -15,6 +17,7 @@ public class Product implements Serializable {
 
     private String type;
 
+    @TextIndexed
     private String name;
 
     private String description;
@@ -28,6 +31,9 @@ public class Product implements Serializable {
     private Date createdOn;
 
     private Date modifiedOn;
+
+    @TextScore
+    private Float score;
 
     public Product() {
 
@@ -114,5 +120,13 @@ public class Product implements Serializable {
 
     public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = modifiedOn;
+    }
+
+    public Float getScore() {
+        return score;
+    }
+
+    public void setScore(Float score) {
+        this.score = score;
     }
 }

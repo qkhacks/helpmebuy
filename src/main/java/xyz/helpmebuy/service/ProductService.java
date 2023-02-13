@@ -1,8 +1,10 @@
 package xyz.helpmebuy.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Service;
 import xyz.helpmebuy.embedded.Link;
+import xyz.helpmebuy.exception.ClientException;
 import xyz.helpmebuy.model.Product;
 import xyz.helpmebuy.repository.ProductRepository;
 
@@ -22,6 +24,10 @@ public class ProductService {
     }
 
     public Product create(String productType, String name, String description, String imageUrl, Map<String, Object> attributes, List<Link> links) {
+        if (nameExists(name)) {
+            throw new ClientException("Product " + name + " already exists");
+        }
+
         Product product = new Product(productType, name, description, imageUrl, attributes, links);
         return productRepository.save(product);
     }
@@ -67,7 +73,15 @@ public class ProductService {
         return product;
     }
 
+    public List<Product> search(String query) {
+        return productRepository.findAllByOrderByScoreDesc(TextCriteria.forDefaultLanguage().matching(query));
+    }
+
     public Boolean allExist(Set<String> productIds) {
         return productRepository.countByIdIn(productIds) == productIds.size();
+    }
+
+    private Boolean nameExists(String name) {
+        return productRepository.existsByName(name);
     }
 }

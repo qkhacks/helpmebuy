@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.helpmebuy.auth.AuthenticatedAdminController;
 import xyz.helpmebuy.model.Node;
+import xyz.helpmebuy.model.Product;
 import xyz.helpmebuy.request.NodeCreationRequest;
 import xyz.helpmebuy.request.NodeUpdateRequest;
 import xyz.helpmebuy.service.NodeService;
@@ -55,5 +56,10 @@ public class NodeAdminController extends AuthenticatedAdminController {
     @GetMapping(value = "/nodes/{nodeId}/children")
     public List<Node> listChildren(@PathVariable String nodeId) {
         return nodeService.listChildren(nodeId);
+    }
+
+    @GetMapping(value = "/nodes/{nodeId}/products")
+    public List<Product> listProducts(@PathVariable String nodeId) {
+        return nodeService.listProducts(nodeId);
     }
 }

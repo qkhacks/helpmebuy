@@ -57,4 +57,9 @@ public class ProductAdminController extends AuthenticatedAdminController {
     public Product delete(@PathVariable String productId) {
         return productService.delete(productId);
     }
+
+    @GetMapping(value = "/products/search")
+    public List<Product> search(@RequestParam String query) {
+        return productService.search(query);
+    }
 }

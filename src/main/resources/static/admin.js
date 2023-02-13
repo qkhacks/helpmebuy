@@ -236,6 +236,7 @@ const productsTemplate = Handlebars.compile($("#products-template").html());
 
 let treeKey = null;
 let nodeId = null;
+let selectedNodeProduct = null;
 
 function renderTrees() {
     listTrees(function (data) {
@@ -830,5 +831,35 @@ $(document).ready(function () {
         }, function (data) {
             displayError($("#delete-product-message"), data.responseJSON.message);
         });
+    });
+
+    new Autocomplete("add-node-product-name", {
+        onSearch: ({ currentValue }) => {
+            const api = `/api/v1/products/search?query=${encodeURI(
+                currentValue
+            )}`;
+            return new Promise((resolve) => {
+                fetch(api, { headers: getHeaders() })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        resolve(data);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            });
+        },
+
+        onResults: ({ matches }) =>
+            matches.map((el) => `<li>${el.name}</li>`).join(""),
+
+        onSelectedItem: ({ index, element, object }) => {
+            selectedNodeProduct = object;
+        },
+    });
+
+    $("#add-node-product-btn").click(function (e) {
+        e.preventDefault();
+        console.log(selectedNodeProduct);
     });
 });

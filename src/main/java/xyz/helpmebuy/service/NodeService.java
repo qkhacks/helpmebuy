@@ -7,6 +7,7 @@ import xyz.helpmebuy.embedded.Route;
 import xyz.helpmebuy.exception.ClientException;
 import xyz.helpmebuy.exception.NotFoundException;
 import xyz.helpmebuy.model.Node;
+import xyz.helpmebuy.model.Product;
 import xyz.helpmebuy.repository.NodeRepository;
 import xyz.helpmebuy.util.OptionChoices;
 
@@ -147,6 +148,16 @@ public class NodeService {
         }
 
         return get(childrenIds);
+    }
+
+    public List<Product> listProducts(String nodeId) {
+        Node node = get(nodeId);
+
+        if (node.getLeaf()) {
+            throw new ClientException("Node is not a leaf");
+        }
+
+        return productService.get(node.getProducts());
     }
 
     public Boolean exists(String nodeId) {
