@@ -153,7 +153,7 @@ public class NodeService {
     public List<Product> listProducts(String nodeId) {
         Node node = get(nodeId);
 
-        if (node.getLeaf()) {
+        if (!node.getLeaf()) {
             throw new ClientException("Node is not a leaf");
         }
 

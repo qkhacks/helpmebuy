@@ -646,8 +646,17 @@
         <tr id="product-{{id}}">
             <td>{{name}}</td>
             <td>
-                <button class="btn btn-outline-warning btn-sm edit-product-modal-btn" data-id="{{id}}">Edit</button>
                 <button class="btn btn-outline-danger btn-sm delete-product-modal-btn" data-id="{{id}}" data-bs-toggle="modal" data-bs-target="#delete-product-modal">Delete</button>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+    <script type="text/x-handlebars-template" id="node-products-template">
+        {{#each products}}
+        <tr id="node-product-{{id}}">
+            <td>{{name}}</td>
+            <td>
+                <button class="btn btn-outline-danger btn-sm delete-node-product-modal-btn" data-id="{{id}}" data-bs-toggle="modal" data-bs-target="#delete-node-product-modal">Delete</button> 
             </td>
         </tr>
         {{/each}}

@@ -218,6 +218,18 @@ function deleteProduct(productId, success, error) {
     });
 }
 
+function listNodeProducts(nodeId, success, error) {
+    $.ajax({
+        url: "/api/v1/nodes/" + nodeId + "/products",
+        type: "get",
+        dataType: "json",
+        contentType: "application/json",
+        headers: getHeaders(),
+        success: success,
+        error: error
+    });
+}
+
 function getHeaders() {
     return {
         Authorization: "AdminSecret " + localStorage.getItem("adminSecret")
@@ -233,6 +245,7 @@ const parentOptionsInputTemplate = Handlebars.compile($("#parent-options-input-t
 const addProductAttributeTemplate = Handlebars.compile($("#add-product-attribute-template").html());
 const addProductLinkTemplate = Handlebars.compile($("#add-product-link-template").html());
 const productsTemplate = Handlebars.compile($("#products-template").html());
+const nodeProductsTemplate = Handlebars.compile($("#node-products-template").html());
 
 let treeKey = null;
 let nodeId = null;
@@ -266,7 +279,9 @@ function renderTreeNode(node) {
 }
 
 function renderTreeLeaf(node) {
-    console.log(node);
+    listNodeProducts(node.id, function (data) {
+        $("#node-products").html(nodeProductsTemplate({ products: data }));
+    });
 }
 
 function renderProducts() {
@@ -860,6 +875,37 @@ $(document).ready(function () {
 
     $("#add-node-product-btn").click(function (e) {
         e.preventDefault();
-        console.log(selectedNodeProduct);
+
+        if (selectedNodeProduct == null) {
+            displayError($("#add-node-product-message"), "Product is not selected");
+            return;
+        }
+
+        getNode(nodeId, function (data) {
+            if (data.hasOwnProperty("id")) {
+                if (data.products == null) {
+                    data.products = [];
+                }
+
+                if (!data.products.includes(selectedNodeProduct.id)) {
+                    data.products.push(selectedNodeProduct.id);
+                }
+
+                updateNode(nodeId, data.prompt, data.options, data.multipleOptionChoicesAllowed, data.products, function (data) {
+                    if (data.hasOwnProperty("id")) {
+                        displaySuccess($("#add-node-product-message"), "Product added to node successfully");
+                        $("#node-products").prepend(nodeProductsTemplate({ products: [selectedNodeProduct] }));
+                    } else {
+                        displayError($("#add-node-product-message"), data.message);
+                    }
+                }, function (data) {
+                    displayError($("#add-node-product-message"), data.responseJSON.message);
+                })
+            } else {
+                displayError($("#add-node-product-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#add-node-product-message"), data.responseJSON.message);
+        });
     });
 });
