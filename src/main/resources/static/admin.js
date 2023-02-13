@@ -908,4 +908,51 @@ $(document).ready(function () {
             displayError($("#add-node-product-message"), data.responseJSON.message);
         });
     });
+
+    body.on("click", ".delete-node-product-modal-btn", function (e) {
+        let productId = $(this).data("id");
+        $("#delete-node-product-id").val(productId);
+    });
+
+    $("#delete-node-product-btn").click(function (e) {
+        e.preventDefault();
+
+        let productId = $("#delete-node-product-id").val().trim();
+
+        if (productId === "") {
+            displayError($("#delete-node-product-message"), "Product is not selected");
+            return;
+        }
+
+        let confirmation = $("#delete-node-product-confirmation").val();
+
+        if (confirmation !== "yes") {
+            displayError($("#delete-node-product-message"), "Please confirm deletion of the product below");
+            return;
+        }
+
+        getNode(nodeId, function (data) {
+            if (data.hasOwnProperty("id")) {
+                const index = data.products.indexOf(productId);
+                if (index > -1) {
+                    data.products.splice(index, 1);
+                }
+
+                updateNode(nodeId, data.prompt, data.options, data.multipleOptionChoicesAllowed, data.products, function (data) {
+                    if (data.hasOwnProperty("id")) {
+                        displaySuccess($("#delete-node-product-message"), "Product removed from node successfully");
+                        $("#node-product-" + productId).remove();
+                    } else {
+                        displayError($("#delete-node-product-message"), data.message);
+                    }
+                }, function (data) {
+                    displayError($("#delete-node-product-message"), data.responseJSON.message);
+                })
+            } else {
+                displayError($("#delete-node-product-message"), data.message);
+            }
+        }, function (data) {
+            displayError($("#delete-node-product-message"), data.responseJSON.message);
+        });
+    });
 });
